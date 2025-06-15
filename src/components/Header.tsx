@@ -1,13 +1,18 @@
 
 import { Button } from "@/components/ui/button";
-import { Mic, Menu } from "lucide-react";
+import { Mic, Menu, X } from "lucide-react";
 import { useState } from "react";
 import AuthModal from "./auth/AuthModal";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const { user } = useAuth();
+
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
+  };
 
   return (
     <>
@@ -39,7 +44,7 @@ const Header = () => {
               {user ? (
                 <Button 
                   onClick={() => window.location.href = '/dashboard'}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hidden md:flex"
                 >
                   Dashboard
                 </Button>
@@ -49,18 +54,84 @@ const Header = () => {
                     Sign In
                   </Button>
                   <Button 
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hidden md:flex"
                     onClick={() => setShowAuthModal(true)}
                   >
                     Start Free Trial
                   </Button>
                 </>
               )}
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden"
+                onClick={toggleMobileMenu}
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
+
+          {/* Mobile Menu */}
+          {showMobileMenu && (
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
+              <nav className="flex flex-col space-y-4 pt-4">
+                <a 
+                  href="#features" 
+                  className="text-gray-600 hover:text-purple-600 transition-colors px-2 py-1"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Features
+                </a>
+                <a 
+                  href="#pricing" 
+                  className="text-gray-600 hover:text-purple-600 transition-colors px-2 py-1"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Pricing
+                </a>
+                <a 
+                  href="#demo" 
+                  className="text-gray-600 hover:text-purple-600 transition-colors px-2 py-1"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Demo
+                </a>
+                <div className="flex flex-col space-y-2 pt-2">
+                  {user ? (
+                    <Button 
+                      onClick={() => window.location.href = '/dashboard'}
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 w-full"
+                    >
+                      Dashboard
+                    </Button>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full" 
+                        onClick={() => {
+                          setShowAuthModal(true);
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        Sign In
+                      </Button>
+                      <Button 
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 w-full"
+                        onClick={() => {
+                          setShowAuthModal(true);
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        Start Free Trial
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </nav>
+            </div>
+          )}
         </div>
       </header>
 
