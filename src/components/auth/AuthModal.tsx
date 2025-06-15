@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mail, CheckCircle } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
+  const [confirmationEmail, setConfirmationEmail] = useState('');
   const { signIn, signUp } = useAuth();
 
   if (!isOpen) return null;
@@ -32,12 +35,30 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to sign in",
-        variant: "destructive",
-      });
+    } catch (error: any) {
+      let errorMessage = "Failed to sign in";
+      
+      if (error.message?.includes("Email not confirmed")) {
+        errorMessage = "Please check your email and click the confirmation link before signing in.";
+        toast({
+          title: "Email Confirmation Required",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      } else if (error.message?.includes("Invalid login credentials")) {
+        errorMessage = "Invalid email or password. Please check your credentials.";
+        toast({
+          title: "Sign In Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || errorMessage,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -48,21 +69,75 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       await signUp(email, password, fullName);
-      onClose();
+      setConfirmationEmail(email);
+      setShowEmailConfirmation(true);
       toast({
         title: "Account created!",
-        description: "Check your email to verify your account.",
+        description: "Please check your email to verify your account.",
       });
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage = "Failed to create account";
+      
+      if (error.message?.includes("rate")) {
+        errorMessage = "Please wait 20 seconds before requesting another confirmation email.";
+      } else if (error.message?.includes("already registered")) {
+        errorMessage = "This email is already registered. Try signing in instead.";
+      }
+      
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create account",
+        title: "Sign Up Error",
+        description: error.message || errorMessage,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
+
+  if (showEmailConfirmation) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <Card className="w-full max-w-md mx-4">
+          <CardHeader className="text-center">
+            <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <Mail className="w-6 h-6 text-blue-600" />
+            </div>
+            <CardTitle>Check Your Email</CardTitle>
+            <CardDescription>
+              We've sent a confirmation link to {confirmationEmail}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="space-y-2">
+                  <p><strong>Next steps:</strong></p>
+                  <ol className="list-decimal list-inside space-y-1 text-sm">
+                    <li>Check your email inbox (and spam folder)</li>
+                    <li>Click the confirmation link in the email</li>
+                    <li>Return here and sign in with your credentials</li>
+                  </ol>
+                </div>
+              </AlertDescription>
+            </Alert>
+            <div className="flex space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowEmailConfirmation(false)}
+                className="flex-1"
+              >
+                Back to Sign In
+              </Button>
+              <Button onClick={onClose} className="flex-1">
+                Close
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -121,10 +196,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 />
                 <Input
                   type="password"
-                  placeholder="Password"
+                  placeholder="Password (minimum 6 characters)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  minLength={6}
                 />
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
