@@ -217,7 +217,7 @@ const SocialSync = () => {
                       rows={3}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Use {{`{languages}`}} to automatically insert available languages
+                      Use {`{{languages}}`} to automatically insert available languages
                     </p>
                   </div>
                   
