@@ -27,14 +27,15 @@ if (typeof window !== 'undefined') {
     console.log(`App loaded in ${loadTime.toFixed(2)}ms`);
     
     // Report Web Vitals
-    if ('web-vitals' in window) {
-      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-        getCLS(console.log);
-        getFID(console.log);
-        getFCP(console.log);
-        getLCP(console.log);
-        getTTFB(console.log);
-      });
-    }
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(console.log);
+      getFID(console.log);
+      getFCP(console.log);
+      getLCP(console.log);
+      getTTFB(console.log);
+    }).catch(() => {
+      // Silently handle if web-vitals is not available
+      console.log('Web Vitals not available');
+    });
   });
 }
