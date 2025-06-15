@@ -4,27 +4,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>linguaflow-global-podcasts</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-
-    <meta property="og:title" content="linguaflow-global-podcasts" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <title>LinguaFlow - Global Podcast Translation Platform</title>
+    <meta name="description" content="Transform your podcasts into global content with AI-powered translation and voice cloning. Reach audiences worldwide with LinguaFlow's advanced technology." />
+    <meta name="author" content="LinguaFlow" />
+    <meta name="keywords" content="podcast translation, AI voice cloning, global content, multilingual podcasts, audio translation" />
+    
+    <!-- Performance optimizations -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" /></noscript>
+    
+    <!-- Open Graph optimized -->
+    <meta property="og:title" content="LinguaFlow - Global Podcast Translation Platform" />
+    <meta property="og:description" content="Transform your podcasts into global content with AI-powered translation and voice cloning. Reach audiences worldwide with LinguaFlow's advanced technology." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://linguaflow.app" />
+    <meta property="og:image" content="https://linguaflow.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="LinguaFlow" />
 
+    <!-- Twitter Card optimized -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:site" content="@linguaflow" />
+    <meta name="twitter:title" content="LinguaFlow - Global Podcast Translation Platform" />
+    <meta name="twitter:description" content="Transform your podcasts into global content with AI-powered translation and voice cloning." />
+    <meta name="twitter:image" content="https://linguaflow.app/og-image.png" />
 
-    <!-- Google Fonts - Roboto for clean, modern UI -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Accessibility improvements -->
+    <meta name="theme-color" content="#8B5CF6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="LinguaFlow" />
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;" />
+    
+    <!-- Font connections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Preload font display swap fallback -->
+    <script>
+      // Optimize font loading
+      if ('fonts' in document) {
+        const roboto = new FontFace('Roboto', 'url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2)');
+        roboto.load().then(() => document.fonts.add(roboto));
+      }
+    </script>
   </body>
 </html>

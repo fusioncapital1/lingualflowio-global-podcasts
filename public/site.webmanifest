@@ -1,0 +1,31 @@
+
+{
+  "name": "LinguaFlow - Global Podcast Translation Platform",
+  "short_name": "LinguaFlow",
+  "description": "Transform your podcasts into global content with AI-powered translation and voice cloning",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "business", "multimedia"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

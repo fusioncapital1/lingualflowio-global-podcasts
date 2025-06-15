@@ -1,7 +1,20 @@
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://linguaflow.app/sitemap.xml
+
+# Crawl-delay for better server performance
+Crawl-delay: 1
+
+# Specific bot instructions
 User-agent: Googlebot
+Disallow: /api/
 Allow: /
 
 User-agent: Bingbot
+Disallow: /api/
 Allow: /
 
 User-agent: Twitterbot
@@ -10,5 +23,12 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Block AI scrapers (optional)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
