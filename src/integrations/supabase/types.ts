@@ -9,7 +9,139 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      podcasts: {
+        Row: {
+          audio_file_size: number | null
+          audio_file_url: string | null
+          created_at: string | null
+          description: string | null
+          duration_seconds: number | null
+          id: string
+          original_language: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          audio_file_size?: number | null
+          audio_file_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          original_language?: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          audio_file_size?: number | null
+          audio_file_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          original_language?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "podcasts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          company_name: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          subscription_status: string | null
+          subscription_tier: string | null
+          trial_ends_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      translations: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          podcast_id: string
+          status: string | null
+          target_language: string
+          transcript_original: string | null
+          transcript_translated: string | null
+          translated_audio_url: string | null
+          voice_clone_enabled: boolean | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          podcast_id: string
+          status?: string | null
+          target_language: string
+          transcript_original?: string | null
+          transcript_translated?: string | null
+          translated_audio_url?: string | null
+          voice_clone_enabled?: boolean | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          podcast_id?: string
+          status?: string | null
+          target_language?: string
+          transcript_original?: string | null
+          transcript_translated?: string | null
+          translated_audio_url?: string | null
+          voice_clone_enabled?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translations_podcast_id_fkey"
+            columns: ["podcast_id"]
+            isOneToOne: false
+            referencedRelation: "podcasts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
