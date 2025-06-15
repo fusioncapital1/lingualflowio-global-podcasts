@@ -5,9 +5,12 @@ import { Check, Star } from "lucide-react";
 import { useState } from "react";
 import AuthModal from "./auth/AuthModal";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const Pricing = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { user } = useAuth();
 
   const plans = [
@@ -26,8 +29,7 @@ const Pricing = () => {
         "14-day free trial"
       ],
       buttonText: "Start Free Trial",
-      popular: false,
-      stripePriceId: "price_starter_monthly" // We'll set this up
+      popular: false
     },
     {
       name: "Professional",
@@ -46,8 +48,7 @@ const Pricing = () => {
         "Analytics dashboard"
       ],
       buttonText: "Start Free Trial",
-      popular: true,
-      stripePriceId: "price_professional_monthly"
+      popular: true
     },
     {
       name: "Enterprise",
@@ -67,26 +68,43 @@ const Pricing = () => {
         "Dedicated account manager"
       ],
       buttonText: "Contact Sales",
-      popular: false,
-      stripePriceId: "price_enterprise_monthly"
+      popular: false
     }
   ];
 
-  const handlePlanSelect = (plan: any) => {
+  const handlePlanSelect = async (plan: any) => {
     if (!user) {
       setShowAuthModal(true);
       return;
     }
     
     if (plan.name === "Enterprise") {
-      // For enterprise, redirect to contact form or calendar
       window.open("mailto:sales@linguaflow.com?subject=Enterprise Plan Inquiry", "_blank");
       return;
     }
     
-    // For other plans, we'll implement Stripe checkout
-    // TODO: Implement Stripe checkout
-    console.log("Selected plan:", plan.name);
+    setLoadingPlan(plan.name);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { planName: plan.name }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create checkout session",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingPlan(null);
+    }
   };
 
   return (
@@ -151,13 +169,14 @@ const Pricing = () => {
                   
                   <Button 
                     onClick={() => handlePlanSelect(plan)}
+                    disabled={loadingPlan === plan.name}
                     className={`w-full py-3 text-lg font-semibold ${
                       plan.popular 
                         ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700' 
                         : 'bg-gray-800 hover:bg-gray-900'
                     }`}
                   >
-                    {plan.buttonText}
+                    {loadingPlan === plan.name ? "Loading..." : plan.buttonText}
                   </Button>
                 </CardContent>
               </Card>
