@@ -7,8 +7,8 @@ PROJECT_ID="your-project-id-here"
 # Set the region for deployment
 REGION="us-central1"
 
-# Service name - keeping it short to avoid character limits
-SERVICE_NAME="linguaflow"
+# Service name
+SERVICE_NAME="lingualflowio-global-podcasts"
 
 echo "🚀 Deploying LinguaFlowio to Google Cloud Run..."
 
