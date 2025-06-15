@@ -10,7 +10,7 @@ export const WebVitals = ({ reportWebVitals }: WebVitalsProps) => {
     if (reportWebVitals && typeof window !== 'undefined') {
       import('web-vitals').then((webVitals) => {
         webVitals.onCLS(reportWebVitals);
-        webVitals.onFID(reportWebVitals);
+        webVitals.onINP(reportWebVitals); // Updated from onFID
         webVitals.onFCP(reportWebVitals);
         webVitals.onLCP(reportWebVitals);
         webVitals.onTTFB(reportWebVitals);

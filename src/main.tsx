@@ -29,7 +29,7 @@ if (typeof window !== 'undefined') {
     // Report Web Vitals
     import('web-vitals').then((webVitals) => {
       webVitals.onCLS(console.log);
-      webVitals.onFID(console.log);
+      webVitals.onINP(console.log); // Updated from onFID
       webVitals.onFCP(console.log);
       webVitals.onLCP(console.log);
       webVitals.onTTFB(console.log);
