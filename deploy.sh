@@ -8,9 +8,9 @@ PROJECT_ID="your-project-id-here"
 REGION="us-central1"
 
 # Service name
-SERVICE_NAME="linguaflow"
+SERVICE_NAME="linguaflowio"
 
-echo "🚀 Deploying LinguaFlow to Google Cloud Run..."
+echo "🚀 Deploying LinguaFlowio to Google Cloud Run..."
 
 # Set the project
 gcloud config set project $PROJECT_ID
