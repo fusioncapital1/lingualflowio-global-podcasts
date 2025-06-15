@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
@@ -7,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Upload, Globe, Mic, Users, Crown, Calendar } from 'lucide-react';
 import PodcastUpload from '@/components/dashboard/PodcastUpload';
 import PodcastList from '@/components/dashboard/PodcastList';
+import SocialSync from '@/components/dashboard/SocialSync';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
@@ -141,9 +141,15 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <PodcastUpload />
-          <PodcastList />
+        <div className="space-y-8">
+          {/* Upload and List Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <PodcastUpload />
+            <PodcastList />
+          </div>
+          
+          {/* Social Media Sync Section */}
+          <SocialSync />
         </div>
       </main>
     </div>
