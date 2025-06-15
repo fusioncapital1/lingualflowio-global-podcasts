@@ -27,12 +27,12 @@ if (typeof window !== 'undefined') {
     console.log(`App loaded in ${loadTime.toFixed(2)}ms`);
     
     // Report Web Vitals
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(console.log);
-      getFID(console.log);
-      getFCP(console.log);
-      getLCP(console.log);
-      getTTFB(console.log);
+    import('web-vitals').then((webVitals) => {
+      webVitals.onCLS(console.log);
+      webVitals.onFID(console.log);
+      webVitals.onFCP(console.log);
+      webVitals.onLCP(console.log);
+      webVitals.onTTFB(console.log);
     }).catch(() => {
       // Silently handle if web-vitals is not available
       console.log('Web Vitals not available');
