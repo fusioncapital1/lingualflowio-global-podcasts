@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, Mail, CheckCircle } from 'lucide-react';
+import { Loader2, Mail, CheckCircle, AlertTriangle } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -39,14 +39,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       let errorMessage = "Failed to sign in";
       
       if (error.message?.includes("Email not confirmed")) {
-        errorMessage = "Please check your email and click the confirmation link before signing in.";
+        errorMessage = "Please check your email and click the confirmation link before signing in. If you can't find the email, try signing up again to get a new confirmation email.";
         toast({
           title: "Email Confirmation Required",
           description: errorMessage,
           variant: "destructive",
         });
       } else if (error.message?.includes("Invalid login credentials")) {
-        errorMessage = "Invalid email or password. Please check your credentials.";
+        errorMessage = "Invalid email or password. Please check your credentials or sign up if you don't have an account yet.";
         toast({
           title: "Sign In Failed",
           description: errorMessage,
@@ -73,15 +73,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       setShowEmailConfirmation(true);
       toast({
         title: "Account created!",
-        description: "Please check your email to verify your account.",
+        description: "Please check your email to verify your account before signing in.",
       });
     } catch (error: any) {
       let errorMessage = "Failed to create account";
       
       if (error.message?.includes("rate")) {
-        errorMessage = "Please wait 20 seconds before requesting another confirmation email.";
+        errorMessage = "Please wait 60 seconds before requesting another confirmation email.";
       } else if (error.message?.includes("already registered")) {
-        errorMessage = "This email is already registered. Try signing in instead.";
+        errorMessage = "This email is already registered. Try signing in instead, or check your email for a confirmation link.";
+      } else if (error.message?.includes("Password")) {
+        errorMessage = "Password must be at least 6 characters long.";
       }
       
       toast({
@@ -89,6 +91,33 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         description: error.message || errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    setLoading(true);
+    try {
+      await signUp(confirmationEmail, password, fullName);
+      toast({
+        title: "Confirmation email sent!",
+        description: "A new confirmation email has been sent. Please check your inbox.",
+      });
+    } catch (error: any) {
+      if (error.message?.includes("rate")) {
+        toast({
+          title: "Please wait",
+          description: "You can only request a new confirmation email every 60 seconds.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to resend confirmation email. Please try again.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -121,15 +150,32 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 </div>
               </AlertDescription>
             </Alert>
-            <div className="flex space-x-2">
+            
+            <Alert className="border-orange-200 bg-orange-50">
+              <AlertTriangle className="h-4 w-4 text-orange-600" />
+              <AlertDescription className="text-orange-800">
+                <strong>Important:</strong> The confirmation link will redirect you to this app. Make sure you're accessing this app from the same browser where you clicked the confirmation link.
+              </AlertDescription>
+            </Alert>
+
+            <div className="flex flex-col space-y-2">
+              <Button 
+                variant="outline" 
+                onClick={handleResendConfirmation}
+                disabled={loading}
+                className="w-full"
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Resend Confirmation Email
+              </Button>
               <Button 
                 variant="outline" 
                 onClick={() => setShowEmailConfirmation(false)}
-                className="flex-1"
+                className="w-full"
               >
                 Back to Sign In
               </Button>
-              <Button onClick={onClose} className="flex-1">
+              <Button onClick={onClose} className="w-full">
                 Close
               </Button>
             </div>
