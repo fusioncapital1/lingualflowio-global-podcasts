@@ -48,21 +48,17 @@ serve(async (req) => {
       logStep("No existing customer, will create during checkout");
     }
 
-    // Define price IDs based on your Stripe products
+    // Define price IDs based on your actual Stripe products
     let priceId: string;
-    let amount: number;
     switch (planName) {
       case "Starter":
-        priceId = "price_starter_monthly"; // You'll need to get the actual price ID from Stripe
-        amount = 1900; // $19
+        priceId = "price_1Ra6ZMLSIMfBxWKWwM093HFA"; // $19/month
         break;
       case "Professional":
-        priceId = "price_professional_monthly"; // You'll need to get the actual price ID from Stripe
-        amount = 4900; // $49
+        priceId = "price_1Ra6aeLSIMfBxWKWFCd9Nf9d"; // $49/month
         break;
       case "Enterprise":
-        priceId = "price_enterprise_monthly"; // You'll need to get the actual price ID from Stripe
-        amount = 14900; // $149
+        priceId = "price_1Ra6bvLSIMfBxWKW4YjGqoxp"; // $149/month
         break;
       default:
         throw new Error("Invalid plan selected");
@@ -73,12 +69,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [
         {
-          price_data: {
-            currency: "usd",
-            product_data: { name: `LinguaFlow ${planName}` },
-            unit_amount: amount,
-            recurring: { interval: "month" },
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
