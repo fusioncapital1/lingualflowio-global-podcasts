@@ -1,4 +1,3 @@
-
 import { Mic, Twitter, Linkedin, Youtube, Mail } from "lucide-react";
 
 const Footer = () => {
@@ -12,7 +11,7 @@ const Footer = () => {
                 <Mic className="h-6 w-6 text-white" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                LinguaFlow
+                LingualFlowio
               </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
@@ -58,7 +57,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © 2024 LinguaFlow. All rights reserved.
+              © 2024 LingualFlowio. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>

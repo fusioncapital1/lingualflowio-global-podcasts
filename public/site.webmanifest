@@ -1,7 +1,7 @@
 
 {
-  "name": "LinguaFlow - Global Podcast Translation Platform",
-  "short_name": "LinguaFlow",
+  "name": "LingualFlowio - Global Podcast Translation Platform",
+  "short_name": "LingualFlowio",
   "description": "Transform your podcasts into global content with AI-powered translation and voice cloning",
   "start_url": "/",
   "display": "standalone",
