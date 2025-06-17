@@ -75,9 +75,39 @@ const PodcastUpload = () => {
 
       setUploadedPodcastId(data.id);
       
+      // Call the transcribe-audio function
+      try {
+        console.log(`Invoking transcribe-audio for podcast ${data.id} with URL ${publicUrl}`);
+        const { error: functionError } = await supabase.functions.invoke('transcribe-audio', {
+          body: { podcast_id: data.id, audio_file_url: publicUrl },
+        });
+
+        if (functionError) {
+          // Log the error and show a toast, but don't block the rest of the upload success flow
+          console.error("Error invoking transcribe-audio function:", functionError);
+          toast({
+            title: "Transcription Warning",
+            description: `Could not start transcription automatically: ${functionError.message}. You might need to trigger it manually.`,
+            variant: "destructive", // Or "warning" if you have one
+          });
+        } else {
+          toast({
+            title: "Transcription Started",
+            description: "Audio transcription is now in progress.",
+          });
+        }
+      } catch (error) {
+        console.error("Error invoking transcribe-audio function:", error);
+        toast({
+          title: "Transcription Error",
+          description: `Failed to start transcription: ${error instanceof Error ? error.message : "Unknown error"}`,
+          variant: "destructive",
+        });
+      }
+
       toast({
-        title: "Success!",
-        description: "Your podcast has been uploaded successfully. Now select languages for translation.",
+        title: "Upload Success!",
+        description: "Your podcast is uploaded. Proceed to select languages for translation.",
       });
 
       // Reset form

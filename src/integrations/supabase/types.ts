@@ -178,6 +178,60 @@ export type Database = {
           },
         ]
       }
+      translated_episodes: { // New table definition
+        Row: {
+          id: string // UUID
+          podcast_id: string // UUID
+          language_code: string
+          voice_name: string
+          audio_storage_path: string
+          file_size: number | null
+          duration_seconds: number | null
+          status: string // e.g., 'completed', 'failed', 'processing'
+          created_at: string // TIMESTAMPTZ
+          user_id: string | null // UUID
+        }
+        Insert: {
+          id?: string // UUID, default gen_random_uuid()
+          podcast_id: string // UUID
+          language_code: string
+          voice_name: string
+          audio_storage_path: string
+          file_size?: number | null
+          duration_seconds?: number | null
+          status?: string // Default 'pending'
+          created_at?: string // Default now()
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          podcast_id?: string
+          language_code?: string
+          voice_name?: string
+          audio_storage_path?: string
+          file_size?: number | null
+          duration_seconds?: number | null
+          status?: string
+          created_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "translated_episodes_podcast_id_fkey"
+            columns: ["podcast_id"]
+            isOneToOne: false
+            referencedRelation: "podcasts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "translated_episodes_user_id_fkey" // Assuming this constraint name if you add it
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users" // Supabase default for auth.users
+            referencedColumns: ["id"]
+          }
+        ]
+      } // End of new table definition
     }
     Views: {
       [_ in never]: never
