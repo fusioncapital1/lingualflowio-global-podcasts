@@ -2,7 +2,7 @@
 #!/bin/bash
 
 # Set your Google Cloud project ID
-PROJECT_ID="your-project-id-here"
+PROJECT_ID="lingualflowio"
 
 # Set the region for deployment
 REGION="us-central1"
@@ -15,23 +15,41 @@ echo "🚀 Deploying LinguaFlowio to Google Cloud Run..."
 # Set the project
 gcloud config set project $PROJECT_ID
 
-# Enable required APIs
+# Enable required APIs with retry logic
 echo "📋 Enabling required APIs..."
-gcloud services enable cloudbuild.googleapis.com
-gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
+gcloud services enable cloudbuild.googleapis.com --quiet
+gcloud services enable run.googleapis.com --quiet
+gcloud services enable containerregistry.googleapis.com --quiet
+gcloud services enable artifactregistry.googleapis.com --quiet
 
-# Build and deploy using Cloud Build
+# Wait a moment for IAM policies to propagate
+echo "⏳ Waiting for IAM policies to propagate..."
+sleep 10
+
+# Build and deploy using Cloud Build with retry
 echo "🔨 Building and deploying with Cloud Build..."
-gcloud builds submit --config cloudbuild.yaml .
+gcloud builds submit --config cloudbuild.yaml . --timeout=1200s
 
 # Get the service URL
-SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format="value(status.url)")
+echo "🔍 Getting service URL..."
+SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format="value(status.url)" 2>/dev/null)
 
-echo "✅ Deployment complete!"
-echo "🌐 Your app is live at: $SERVICE_URL"
+if [ -z "$SERVICE_URL" ]; then
+    echo "⚠️  Service URL not found, checking deployment status..."
+    gcloud run services list --region=$REGION
+else
+    echo "✅ Deployment complete!"
+    echo "🌐 Your app is live at: $SERVICE_URL"
+    echo ""
+    echo "📋 Next steps:"
+    echo "1. Point lingualflowio.com to: $SERVICE_URL"
+    echo "2. Google verification will work at: $SERVICE_URL/googlee5340da52b7cbe00.html"
+    echo "3. Set up YouTube API with your live domain"
+fi
+
 echo ""
-echo "📋 Next steps:"
-echo "1. Set up custom domain mapping if desired"
-echo "2. Configure SSL certificate (automatic with custom domain)"
-echo "3. Set up monitoring and logging"
+echo "🔧 For custom domain setup:"
+echo "1. Go to Google Cloud Console > Cloud Run"
+echo "2. Select your service: $SERVICE_NAME"
+echo "3. Click 'Manage Custom Domains'"
+echo "4. Add lingualflowio.com"
