@@ -4,8 +4,8 @@
 # Set your Google Cloud project ID
 PROJECT_ID="lingualflowio"
 
-# Set the region for deployment
-REGION="us-central1"
+# Set the region for deployment (updated to match your actual deployment)
+REGION="europe-west1"
 
 # Service name
 SERVICE_NAME="lingualflowio-global-podcasts"
@@ -36,7 +36,11 @@ SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --form
 
 if [ -z "$SERVICE_URL" ]; then
     echo "⚠️  Service URL not found, checking deployment status..."
+    echo "🔍 Listing all services in region $REGION:"
     gcloud run services list --region=$REGION
+    echo ""
+    echo "🔍 Listing all services in all regions:"
+    gcloud run services list
 else
     echo "✅ Deployment complete!"
     echo "🌐 Your app is live at: $SERVICE_URL"
